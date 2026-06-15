@@ -1,4 +1,3 @@
- Wrote portfolio\index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,28 +31,43 @@
         <li><a href="projects.html">Projects</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
+      <div class="nav-controls">
+        <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </div>
     </nav>
   </header>
 
   <main id="main-content" role="main">
-    <section aria-labelledby="hero-heading">
-      <h1 id="hero-heading">Hi, I'm <span class="highlight">Pothula Harshita</span></h1>
-      <p>I build <strong>accessible</strong>, <strong>performant</strong> web applications that work for everyone.</p>
+    <section aria-labelledby="hero-heading" class="hero">
+      <div class="hero-content">
+        <span class="hero-badge" aria-hidden="true">&#9733; Web Developer</span>
+        <h1 id="hero-heading">Hi, I'm <span class="accent-text">Pothula Harshita</span></h1>
+        <p>I build <strong>accessible</strong>, <strong>performant</strong> web applications that work for everyone.</p>
+        <div class="hero-actions">
+          <a href="projects.html" class="button">View Projects</a>
+          <a href="contact.html" class="button button-secondary">Get in Touch</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-avatar" aria-hidden="true">PH</div>
+      </div>
     </section>
 
     <section aria-labelledby="expertise-heading">
       <h2 id="expertise-heading">Core Expertise</h2>
       <div class="grid">
         <article aria-labelledby="skill-1">
-          <h3 id="skill-1">Semantic HTML & Accessibility</h3>
+          <h3 id="skill-1">Semantic HTML &amp; Accessibility</h3>
           <p>WCAG 2.2 AA compliant markup with ARIA best practices.</p>
         </article>
         <article aria-labelledby="skill-2">
-          <h3 id="skill-2">CSS & Responsive Design</h3>
+          <h3 id="skill-2">CSS &amp; Responsive Design</h3>
           <p>Mobile-first layouts, CSS Grid, Flexbox, and custom properties.</p>
         </article>
         <article aria-labelledby="skill-3">
-          <h3 id="skill-3">JavaScript & TypeScript</h3>
+          <h3 id="skill-3">JavaScript &amp; TypeScript</h3>
           <p>Modern ES2024+, type-safe code with full test coverage.</p>
         </article>
       </div>
@@ -61,12 +75,14 @@
   </main>
 
   <footer role="contentinfo">
-    <p>© 2026 Pothula Harshita. All rights reserved.</p>
+    <p>&copy; 2026 Pothula Harshita. All rights reserved.</p>
     <nav aria-label="Social media links">
       <ul role="list">
-        <li><a href="https://www.linkedin.com/in/harshita-pothula-84b799320?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href="https://github.com/harshita10pothula-coder" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/harshita-pothula-84b799320?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
       </ul>
     </nav>
   </footer>
+<script src="main.js" defer></script>
 </body>
 </html>
