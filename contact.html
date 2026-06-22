@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact |Pothula Harshita — web Developer</title>
-  <meta name="description" content="Get in touch with Pothula Harshita for collaboration, freelance projects, or accessibility consulting.">
+  <title>Pothula Harshita | Web Developer Portfolio</title>
+  <meta name="description" content="Pothula Harshita is a web developer specializing in accessible, performant web applications. View projects, experience, and get in touch.">
+  <meta name="keywords" content="web developer, portfolio, accessible web, HTML5, CSS, JavaScript">
+  <meta name="author" content="Pothula Harshita">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://pothulaharshita.dev/contact">
-  <meta property="og:title" content="Contact | Pothula Harshita — web Developer">
-  <meta property="og:description" content="Get in touch with Pothula Harshita for collaboration, freelance projects, or accessibility consulting.">
-  <meta property="og:url" content="https://pothulaharshita.dev/contact">
+  <link rel="canonical" href="https://pothulaharshita.dev/">
+  <meta property="og:title" content="Pothula Harshita | Web Developer Portfolio">
+  <meta property="og:description" content="Web developer specializing in accessible, performant web applications.">
   <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:url" content="https://pothulaharshita.dev/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Pothula Harshita | Web Developer Portfolio">
+  <meta name="twitter:description" content="Web developer specializing in accessible, performant web applications.">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 </head>
@@ -22,86 +26,46 @@
     <nav role="navigation" aria-label="Main navigation">
       <a href="index.html" class="logo" aria-label="Pothula Harshita home">PH</a>
       <ul role="list">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html" aria-current="page">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="projects.html">Projects</a></li>
-        <li><a href="todo.html">To-Do</a></li>
-        <li><a href="contact.html" aria-current="page">Contact</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
-      <div class="nav-controls">
-        <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
-          <span class="theme-icon" aria-hidden="true">&#9790;</span>
-        </button>
-      </div>
     </nav>
   </header>
 
   <main id="main-content" role="main">
-    <section aria-labelledby="contact-heading">
-      <h1 id="contact-heading">Get in Touch</h1>
-      <p>Have a project in mind or want to discuss accessibility? I'd love to hear from you.</p>
+    <section aria-labelledby="hero-heading">
+      <h1 id="hero-heading">Hi, I'm <span class="highlight">Pothula Harshita</span></h1>
+      <p>I build <strong>accessible</strong>, <strong>performant</strong> web applications that work for everyone.</p>
     </section>
 
-    <section aria-labelledby="form-heading">
-      <h2 id="form-heading" class="visually-hidden">Contact Form</h2>
-
-      <form action="https://formspree.io/f/example" method="POST" novalidate aria-label="Contact form">
-        <fieldset>
-          <legend>Your Details</legend>
-
-          <div class="field">
-            <label for="name">Full Name <span aria-hidden="true">*</span></label>
-            <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" aria-describedby="name-hint">
-            <span id="name-hint" class="hint">Enter your first and last name</span>
-          </div>
-
-          <div class="field">
-            <label for="email">Email Address <span aria-hidden="true">*</span></label>
-            <input type="email" id="email" name="email" required aria-required="true" autocomplete="email" aria-describedby="email-hint" inputmode="email">
-            <span id="email-hint" class="hint">I'll never share your email</span>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Message</legend>
-
-          <div class="field">
-            <label for="subject">Subject <span aria-hidden="true">*</span></label>
-            <select id="subject" name="subject" required aria-required="true">
-              <option value="">Select a subject...</option>
-              <option value="freelance">Freelance Project</option>
-              <option value="consulting">Accessibility Consulting</option>
-              <option value="collaboration">Collaboration</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="message">Message <span aria-hidden="true">*</span></label>
-            <textarea id="message" name="message" rows="6" required aria-required="true" aria-describedby="message-hint"></textarea>
-            <span id="message-hint" class="hint">Maximum 2000 characters</span>
-          </div>
-        </fieldset>
-
-        <div class="field checkbox">
-          <input type="checkbox" id="consent" name="consent" required aria-required="true">
-          <label for="consent">I consent to being contacted regarding my enquiry <span aria-hidden="true">*</span></label>
-        </div>
-
-        <button type="submit">Send Message</button>
-      </form>
+    <section aria-labelledby="expertise-heading">
+      <h2 id="expertise-heading">Core Expertise</h2>
+      <div class="grid">
+        <article aria-labelledby="skill-1">
+          <h3 id="skill-1">Semantic HTML & Accessibility</h3>
+          <p>WCAG 2.2 AA compliant markup with ARIA best practices.</p>
+        </article>
+        <article aria-labelledby="skill-2">
+          <h3 id="skill-2">CSS & Responsive Design</h3>
+          <p>Mobile-first layouts, CSS Grid, Flexbox, and custom properties.</p>
+        </article>
+        <article aria-labelledby="skill-3">
+          <h3 id="skill-3">JavaScript & TypeScript</h3>
+          <p>Modern ES2024+, type-safe code with full test coverage.</p>
+        </article>
+      </div>
     </section>
   </main>
 
   <footer role="contentinfo">
-    <p>&copy; 2026 Pothula Harshita. All rights reserved.</p>
+    <p>© 2026 Pothula Harshita. All rights reserved.</p>
     <nav aria-label="Social media links">
       <ul role="list">
-        <li><a href="https://github.com/harshita10pothula-coder" target="_blank" rel="noopener noreferrer">GitHub</a></li>
         <li><a href="https://www.linkedin.com/in/harshita-pothula-84b799320?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
       </ul>
     </nav>
   </footer>
-<script src="main.js" defer></script>
 </body>
 </html>

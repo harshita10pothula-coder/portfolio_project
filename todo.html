@@ -44,7 +44,7 @@
       </div>
 
       <div class="todo-app" role="application" aria-label="To-do list application">
-        <form id="todo-form" class="todo-form" aria-label="Add new task">
+        <form class="todo-form" aria-label="Add new task">
           <label for="todo-input" class="visually-hidden">New task</label>
           <input
             type="text"
@@ -58,19 +58,19 @@
         </form>
 
         <div class="todo-controls">
-          <span id="todo-count" class="todo-count" aria-live="polite"></span>
-          <div id="todo-filters" class="todo-filters" role="group" aria-label="Filter tasks">
+          <span class="todo-count" aria-live="polite"></span>
+          <div class="todo-filters" role="group" aria-label="Filter tasks">
             <button type="button" class="filter-btn is-active" data-filter="all">All</button>
             <button type="button" class="filter-btn" data-filter="active">Active</button>
             <button type="button" class="filter-btn" data-filter="completed">Completed</button>
           </div>
-          <button id="todo-clear" type="button" class="todo-clear button button-secondary" style="display:none">Clear Completed</button>
+          <button type="button" class="todo-clear button button-secondary" hidden>Clear Completed</button>
         </div>
 
-        <ul id="todo-list" class="todo-list" role="list" aria-label="Task list">
+        <ul class="todo-list" role="list" aria-label="Task list">
         </ul>
 
-        <div id="todo-empty" class="todo-empty" style="display:none">
+        <div class="todo-empty" hidden>
           <div class="empty-state">
             <span class="empty-state-icon" aria-hidden="true">&#9744;</span>
             <p>No tasks yet. Add one above!</p>

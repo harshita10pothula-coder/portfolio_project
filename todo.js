@@ -1,314 +1,276 @@
-// ==================== DATA & SETTINGS ====================
+(function () {
+  let STORAGE_KEY = 'ph-todos';
+  let state = [];
+  let currentFilter = 'all';
 
-// All our to-do items live in this array
-// Each item looks like: { id: "abc123", text: "Buy milk", completed: false }
-let todos = [];
-let currentFilter = "all"; // "all", "active", or "completed"
+  let todoForm = document.querySelector('.todo-form');
+  let todoInput = document.querySelector('.todo-input');
+  let todoList = document.querySelector('.todo-list');
+  let todoEmpty = document.querySelector('.todo-empty');
+  let todoCount = document.querySelector('.todo-count');
+  let todoClear = document.querySelector('.todo-clear');
+  let filterBtns = document.querySelectorAll('.filter-btn');
 
-// Get references to HTML elements we need to work with
-const form = document.getElementById("todo-form");
-const input = document.getElementById("todo-input");
-const list = document.getElementById("todo-list");
-const empty = document.getElementById("todo-empty");
-const countDisplay = document.getElementById("todo-count");
-const clearBtn = document.getElementById("todo-clear");
-const filterContainer = document.getElementById("todo-filters");
-
-// ==================== LOCAL STORAGE (save & load) ====================
-
-function loadTodos() {
-  let saved = localStorage.getItem("ph-todos");
-  if (saved) {
-    todos = JSON.parse(saved);
-  } else {
-    todos = [];
+  function load() {
+    try {
+      let raw = localStorage.getItem(STORAGE_KEY);
+      state = raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      state = [];
+    }
   }
-}
 
-function saveTodos() {
-  localStorage.setItem("ph-todos", JSON.stringify(todos));
-}
-
-// ==================== HELPERS ====================
-
-function makeId() {
-  // Creates a unique ID using current time + random numbers
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-}
-
-function activeCount() {
-  // Count how many todos are NOT completed
-  let count = 0;
-  for (let i = 0; i < todos.length; i++) {
-    if (!todos[i].completed) count++;
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
   }
-  return count;
-}
 
-// ==================== FILTERING ====================
-
-function getVisibleTodos() {
-  if (currentFilter === "active") {
-    // Only return uncompleted todos
-    return todos.filter(t => !t.completed);
-  } else if (currentFilter === "completed") {
-    // Only return completed todos
-    return todos.filter(t => t.completed);
-  } else {
-    // Return everything
-    return todos;
+  function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   }
-}
 
-function setFilter(filterName) {
-  currentFilter = filterName;
+  function getFiltered() {
+    if (currentFilter === 'active') return state.filter(t => !t.completed);
+    if (currentFilter === 'completed') return state.filter(t => t.completed);
+    return state;
+  }
 
-  // Update which filter button looks "active"
-  let buttons = document.querySelectorAll(".filter-btn");
-  for (let i = 0; i < buttons.length; i++) {
-    let btn = buttons[i];
-    if (btn.dataset.filter === filterName) {
-      btn.classList.add("is-active");
+  function getActiveCount() {
+    return state.filter(t => !t.completed).length;
+  }
+
+  function renderCount() {
+    let active = getActiveCount();
+    let total = state.length;
+    if (total === 0) {
+      todoCount.textContent = '';
+      return;
+    }
+    let msg = active + ' ' + (active === 1 ? 'task' : 'tasks') + ' left';
+    todoCount.textContent = msg;
+  }
+
+  function renderClear() {
+    let hasCompleted = state.some(t => t.completed);
+    todoClear.hidden = !hasCompleted;
+  }
+
+  function renderEmpty() {
+    let filtered = getFiltered();
+    let hasState = state.length > 0;
+    if (!hasState || filtered.length === 0) {
+      todoEmpty.hidden = false;
+      if (hasState && filtered.length === 0) {
+        todoEmpty.querySelector('p').textContent = 'No ' + currentFilter + ' tasks.';
+      } else {
+        todoEmpty.querySelector('p').textContent = 'No tasks yet. Add one above!';
+      }
     } else {
-      btn.classList.remove("is-active");
+      todoEmpty.hidden = true;
     }
   }
 
-  render();
-}
+  function createTodoElement(todo) {
+    let li = document.createElement('li');
+    li.className = 'todo-item' + (todo.completed ? ' is-completed' : '');
+    li.dataset.id = todo.id;
 
-// ==================== RENDER (draw the list) ====================
+    let checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'todo-checkbox';
+    checkbox.checked = todo.completed;
+    checkbox.setAttribute('aria-label', 'Mark "' + todo.text + '" as ' + (todo.completed ? 'active' : 'completed'));
 
-function render() {
-  let visible = getVisibleTodos();
+    let label = document.createElement('label');
+    label.className = 'todo-text';
+    label.textContent = todo.text;
 
-  // Clear the list and rebuild it
-  list.innerHTML = "";
+    let editInput = document.createElement('input');
+    editInput.type = 'text';
+    editInput.className = 'todo-edit-input';
+    editInput.value = todo.text;
+    editInput.setAttribute('aria-label', 'Edit task');
 
-  for (let i = 0; i < visible.length; i++) {
-    let todo = visible[i];
-    let li = createTodoItem(todo);
-    list.appendChild(li);
+    let deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'todo-delete';
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.setAttribute('aria-label', 'Delete "' + todo.text + '"');
+
+    li.appendChild(checkbox);
+    li.appendChild(label);
+    li.appendChild(editInput);
+    li.appendChild(deleteBtn);
+
+    return li;
   }
 
-  // Update the "X tasks left" text
-  let active = activeCount();
-  if (todos.length === 0) {
-    countDisplay.textContent = "";
-  } else {
-    let word = active === 1 ? "task" : "tasks";
-    countDisplay.textContent = active + " " + word + " left";
+  function render() {
+    let filtered = getFiltered();
+    todoList.innerHTML = '';
+    filtered.forEach(function (todo) {
+      todoList.appendChild(createTodoElement(todo));
+    });
+    renderCount();
+    renderClear();
+    renderEmpty();
   }
 
-  // Show/hide the "Clear Completed" button
-  let hasCompleted = false;
-  for (let i = 0; i < todos.length; i++) {
-    if (todos[i].completed) hasCompleted = true;
-  }
-  clearBtn.style.display = hasCompleted ? "inline-flex" : "none";
-
-  // Show/hide the empty state message
-  if (todos.length === 0) {
-    empty.querySelector("p").textContent = "No tasks yet. Add one above!";
-    empty.style.display = "block";
-  } else if (visible.length === 0) {
-    empty.querySelector("p").textContent = "No " + currentFilter + " tasks.";
-    empty.style.display = "block";
-  } else {
-    empty.style.display = "none";
-  }
-}
-
-// ==================== CREATE ONE TODO ITEM ====================
-
-function createTodoItem(todo) {
-  // <li class="todo-item">
-  let li = document.createElement("li");
-  li.className = "todo-item";
-  li.dataset.id = todo.id;
-  if (todo.completed) {
-    li.classList.add("is-completed");
+  function addTodo(text) {
+    text = text.trim();
+    if (!text) return;
+    state.push({
+      id: generateId(),
+      text: text,
+      completed: false,
+      createdAt: Date.now()
+    });
+    save();
+    render();
   }
 
-  // <input type="checkbox" class="todo-checkbox">
-  let checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.className = "todo-checkbox";
-  checkbox.checked = todo.completed;
-
-  // <label class="todo-text">Buy milk</label>
-  let label = document.createElement("label");
-  label.className = "todo-text";
-  label.textContent = todo.text;
-  label.setAttribute("aria-label", "Task: " + todo.text);
-
-  // <input type="text" class="todo-edit-input"> (hidden until double-click)
-  let editInput = document.createElement("input");
-  editInput.type = "text";
-  editInput.className = "todo-edit-input";
-  editInput.value = todo.text;
-  editInput.setAttribute("aria-label", "Edit task");
-
-  // <button class="todo-delete">Delete</button>
-  let deleteBtn = document.createElement("button");
-  deleteBtn.type = "button";
-  deleteBtn.className = "todo-delete";
-  deleteBtn.textContent = "Delete";
-
-  // Put everything inside the <li>
-  li.appendChild(checkbox);
-  li.appendChild(label);
-  li.appendChild(editInput);
-  li.appendChild(deleteBtn);
-
-  return li;
-}
-
-// ==================== CRUD OPERATIONS ====================
-
-function addTodo(text) {
-  text = text.trim();
-  if (text === "") return; // Don't add empty tasks
-
-  todos.push({
-    id: makeId(),
-    text: text,
-    completed: false
-  });
-
-  saveTodos();
-  render();
-}
-
-function deleteTodo(id) {
-  let newTodos = [];
-  for (let i = 0; i < todos.length; i++) {
-    if (todos[i].id !== id) {
-      newTodos.push(todos[i]);
-    }
-  }
-  todos = newTodos;
-
-  saveTodos();
-  render();
-}
-
-function toggleTodo(id) {
-  for (let i = 0; i < todos.length; i++) {
-    if (todos[i].id === id) {
-      todos[i].completed = !todos[i].completed;
-    }
+  function deleteTodo(id) {
+    state = state.filter(t => t.id !== id);
+    save();
+    render();
   }
 
-  saveTodos();
-  render();
-}
-
-function updateTodoText(id, newText) {
-  newText = newText.trim();
-  if (newText === "") return;
-
-  for (let i = 0; i < todos.length; i++) {
-    if (todos[i].id === id) {
-      todos[i].text = newText;
-    }
+  function toggleTodo(id) {
+    state.forEach(t => {
+      if (t.id === id) t.completed = !t.completed;
+    });
+    save();
+    render();
   }
 
-  saveTodos();
-  render();
-}
-
-function clearCompleted() {
-  let remaining = [];
-  for (let i = 0; i < todos.length; i++) {
-    if (!todos[i].completed) {
-      remaining.push(todos[i]);
-    }
+  function editTodo(id, newText) {
+    newText = newText.trim();
+    if (!newText) return;
+    state.forEach(t => {
+      if (t.id === id) t.text = newText;
+    });
+    save();
+    render();
   }
-  todos = remaining;
 
-  saveTodos();
-  render();
-}
+  function clearCompleted() {
+    state = state.filter(t => !t.completed);
+    save();
+    render();
+  }
 
-// ==================== EVENT HANDLERS ====================
+  function setFilter(filter) {
+    currentFilter = filter;
+    filterBtns.forEach(function (btn) {
+      let isActive = btn.dataset.filter === filter;
+      btn.classList.toggle('is-active', isActive);
+    });
+    render();
+  }
 
-// -- Form submit: add a new task --
-form.addEventListener("submit", function (event) {
-  event.preventDefault(); // Stop the page from reloading
-  let text = input.value.trim();
-  if (text !== "") {
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    let text = todoInput.value.trim();
+    if (!text) return;
     addTodo(text);
-    input.value = ""; // Clear the input
-    input.focus();    // Put cursor back in the input
-  }
-});
-
-// -- Click events on the list (checkbox toggle + delete) --
-list.addEventListener("click", function (event) {
-  let item = event.target.closest(".todo-item");
-  if (!item) return;
-  let id = item.dataset.id;
-
-  // If they clicked the checkbox, toggle complete/incomplete
-  if (event.target.classList.contains("todo-checkbox")) {
-    toggleTodo(id);
+    todoInput.value = '';
+    todoInput.focus();
   }
 
-  // If they clicked the Delete button, remove the task
-  if (event.target.classList.contains("todo-delete")) {
-    deleteTodo(id);
-  }
-});
+  function handleListClick(e) {
+    let li = e.target.closest('.todo-item');
+    if (!li) return;
+    let id = li.dataset.id;
 
-// -- Double-click on a task to edit it --
-list.addEventListener("dblclick", function (event) {
-  let label = event.target.closest(".todo-text");
-  if (!label) return;
+    if (e.target.classList.contains('todo-checkbox')) {
+      toggleTodo(id);
+      return;
+    }
 
-  let item = label.closest(".todo-item");
-  item.classList.add("is-editing");
-
-  let editInput = item.querySelector(".todo-edit-input");
-  editInput.value = label.textContent;
-  editInput.focus();
-  editInput.select();
-});
-
-// -- Keyboard events while editing (Enter = save, Escape = cancel) --
-list.addEventListener("keydown", function (event) {
-  if (!event.target.classList.contains("todo-edit-input")) return;
-
-  if (event.key === "Enter") {
-    // Save the edit
-    let item = event.target.closest(".todo-item");
-    let id = item.dataset.id;
-    updateTodoText(id, event.target.value);
-    item.classList.remove("is-editing");
+    if (e.target.classList.contains('todo-delete')) {
+      deleteTodo(id);
+      return;
+    }
   }
 
-  if (event.key === "Escape") {
-    // Cancel the edit (restore original text)
-    let item = event.target.closest(".todo-item");
-    let label = item.querySelector(".todo-text");
-    event.target.value = label.textContent;
-    item.classList.remove("is-editing");
+  function handleListDblclick(e) {
+    let label = e.target.closest('.todo-text');
+    if (!label) return;
+    let li = label.closest('.todo-item');
+    if (!li) return;
+    li.classList.add('is-editing');
+    let input = li.querySelector('.todo-edit-input');
+    input.value = label.textContent;
+    input.focus();
+    input.select();
   }
-});
 
-// -- Clicking filter buttons (All / Active / Completed) --
-filterContainer.addEventListener("click", function (event) {
-  let btn = event.target.closest(".filter-btn");
-  if (!btn) return;
-  setFilter(btn.dataset.filter);
-});
+  function handleEditKeydown(e) {
+    if (e.key === 'Enter') {
+      commitEdit(e.target);
+    } else if (e.key === 'Escape') {
+      cancelEdit(e.target);
+    }
+  }
 
-// -- Clear Completed button --
-clearBtn.addEventListener("click", function () {
-  clearCompleted();
-});
+  function handleEditBlur(e) {
+    commitEdit(e.target);
+  }
 
-// ==================== START UP ====================
+  function commitEdit(input) {
+    let li = input.closest('.todo-item');
+    if (!li) return;
+    let id = li.dataset.id;
+    let text = input.value.trim();
+    if (text) {
+      editTodo(id, text);
+    }
+    li.classList.remove('is-editing');
+  }
 
-loadTodos();
-setFilter("all");
+  function cancelEdit(input) {
+    let li = input.closest('.todo-item');
+    if (!li) return;
+    let label = li.querySelector('.todo-text');
+    input.value = label.textContent;
+    li.classList.remove('is-editing');
+  }
+
+  function handleFilterClick(e) {
+    let btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    let filter = btn.dataset.filter;
+    if (filter === currentFilter) return;
+    setFilter(filter);
+  }
+
+  function handleClearClick() {
+    clearCompleted();
+  }
+
+  function init() {
+    load();
+    setFilter('all');
+
+    todoForm.addEventListener('submit', handleFormSubmit);
+    todoList.addEventListener('click', handleListClick);
+    todoList.addEventListener('dblclick', handleListDblclick);
+    todoList.addEventListener('keydown', function (e) {
+      if (e.target.classList.contains('todo-edit-input')) {
+        handleEditKeydown(e);
+      }
+    });
+    todoList.addEventListener('blur', function (e) {
+      if (e.target.classList.contains('todo-edit-input')) {
+        handleEditBlur(e);
+      }
+    }, true);
+    document.querySelector('.todo-filters').addEventListener('click', handleFilterClick);
+    todoClear.addEventListener('click', handleClearClick);
+  }
+
+  if (document.querySelector('.todo-app')) {
+    init();
+  }
+})();
