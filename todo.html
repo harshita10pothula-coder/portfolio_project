@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List | Pothula Harshita — Web Developer</title>
+  <meta name="description" content="Interactive client-side To-Do List application with CRUD, localStorage persistence, and advanced filtering.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://pothulaharshita.dev/todo">
+  <meta property="og:title" content="To-Do List | Pothula Harshita — Web Developer">
+  <meta property="og:description" content="Interactive client-side To-Do List application with CRUD, localStorage persistence, and advanced filtering.">
+  <meta property="og:url" content="https://pothulaharshita.dev/todo">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header role="banner">
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="index.html" class="logo" aria-label="Pothula Harshita home">PH</a>
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="todo.html" aria-current="page">To-Do</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content" role="main">
+    <section aria-labelledby="todo-heading">
+      <div class="section-header">
+        <h1 id="todo-heading">To-Do List</h1>
+        <p>A fully interactive task manager with client-side data persistence.</p>
+      </div>
+
+      <div class="todo-app" role="application" aria-label="To-do list application">
+        <form id="todo-form" class="todo-form" aria-label="Add new task">
+          <label for="todo-input" class="visually-hidden">New task</label>
+          <input
+            type="text"
+            id="todo-input"
+            class="todo-input"
+            placeholder="Add a new task…"
+            autocomplete="off"
+            required
+          >
+          <button type="submit" class="button todo-submit">Add Task</button>
+        </form>
+
+        <div class="todo-controls">
+          <span id="todo-count" class="todo-count" aria-live="polite"></span>
+          <div id="todo-filters" class="todo-filters" role="group" aria-label="Filter tasks">
+            <button type="button" class="filter-btn is-active" data-filter="all">All</button>
+            <button type="button" class="filter-btn" data-filter="active">Active</button>
+            <button type="button" class="filter-btn" data-filter="completed">Completed</button>
+          </div>
+          <button id="todo-clear" type="button" class="todo-clear button button-secondary" style="display:none">Clear Completed</button>
+        </div>
+
+        <ul id="todo-list" class="todo-list" role="list" aria-label="Task list">
+        </ul>
+
+        <div id="todo-empty" class="todo-empty" style="display:none">
+          <div class="empty-state">
+            <span class="empty-state-icon" aria-hidden="true">&#9744;</span>
+            <p>No tasks yet. Add one above!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <p>&copy; 2026 Pothula Harshita. All rights reserved.</p>
+    <nav aria-label="Social media links">
+      <ul role="list">
+        <li><a href="https://github.com/harshita10pothula-coder" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/harshita-pothula-84b799320?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+    </nav>
+  </footer>
+<script src="main.js" defer></script>
+<script src="todo.js" defer></script>
+</body>
+</html>
